@@ -1,0 +1,4 @@
+azure-identity==1.25.1
+azure-ai-ml==1.30.0 
+pyyaml==6.0.3 
+python-dotenv==1.2.1

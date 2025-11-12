@@ -1,0 +1,100 @@
+id,prompt,gold_answer,category
+1,What is 128 + 256?,384,math_reasoning
+2,What is 15 × 14?,210,math_reasoning
+3,What is the square root of 121?,11,math_reasoning
+4,Solve: 3x + 9 = 24. What is x?,5,math_reasoning
+5,What is 540 / 9?,60,math_reasoning
+6,What is 12 squared?,144,math_reasoning
+7,What is 7 factorial?,5040,math_reasoning
+8,What is 2 to the power of 8?,256,math_reasoning
+9,What is 81 – 29?,52,math_reasoning
+10,Solve: 9x = 63. What is x?,7,math_reasoning
+11,What is the LCM of 6 and 8?,24,math_reasoning
+12,What is the GCD of 45 and 60?,15,math_reasoning
+13,What is the perimeter of a square with side 11?,44,math_reasoning
+14,Convert 0.5 to a percentage.,50%,math_reasoning
+15,What is 33 × 12?,396,math_reasoning
+16,What is 100 ÷ 25?,4,math_reasoning
+17,What is 3³?,27,math_reasoning
+18,What is 14 + 27?,41,math_reasoning
+19,Solve: 4x − 8 = 20.,7,math_reasoning
+20,"What is the average of 6, 10, and 14?",10,math_reasoning
+21,What is 1/4 + 1/2?,3/4,math_reasoning
+22,What is 0.75 expressed as a fraction?,3/4,math_reasoning
+23,What is 18 × 5?,90,math_reasoning
+24,What is 64 ÷ 4?,16,math_reasoning
+25,What is the square root of 196?,14,math_reasoning
+26,What is 19 + 21?,40,math_reasoning
+27,Solve: x/4 = 6. What is x?,24,math_reasoning
+28,What is 3 × 17?,51,math_reasoning
+29,What is 150 − 85?,65,math_reasoning
+30,What is 90% of 200?,180,math_reasoning
+31,What is 5 to the power of 3?,125,math_reasoning
+32,What is 1/3 + 1/6?,1/2,math_reasoning
+33,What is 420 ÷ 7?,60,math_reasoning
+34,What is 9 × 19?,171,math_reasoning
+35,What is 0.2 × 50?,10,math_reasoning
+36,What is the area of a square with side 9?,81,math_reasoning
+37,Convert 25% to fraction.,1/4,math_reasoning
+38,Solve: 2x + 6 = 22.,8,math_reasoning
+39,What is 14 × 8?,112,math_reasoning
+40,What is 72 ÷ 3?,24,math_reasoning
+41,What is 55 – 19?,36,math_reasoning
+42,What is the square root of 256?,16,math_reasoning
+43,What is 27 + 33?,60,math_reasoning
+44,What is 8 × 13?,104,math_reasoning
+45,Solve: 5x = 45.,9,math_reasoning
+46,What is 49 ÷ 7?,7,math_reasoning
+47,What is 2/5 + 1/10?,1/2,math_reasoning
+48,What is 11 × 11?,121,math_reasoning
+49,What is 300 − 125?,175,math_reasoning
+50,What is 7²?,49,math_reasoning
+51,What is the capital of Canada?,Ottawa,factual_close
+52,Who wrote 'The Hobbit'?,J. R. R. Tolkien,factual_close
+53,What is the capital of Spain?,Madrid,factual_close
+54,Who painted the Mona Lisa?,Leonardo da Vinci,factual_close
+55,What is the chemical symbol for Iron?,Fe,factual_close
+56,What is the tallest mountain on Earth?,Mount Everest,factual_close
+57,What is the largest ocean on Earth?,Pacific Ocean,factual_close
+58,What planet is known as the Red Planet?,Mars,factual_close
+59,What is the currency of Japan?,Yen,factual_close
+60,What is the capital of Italy?,Rome,factual_close
+61,Who discovered penicillin?,Alexander Fleming,factual_close
+62,What is the boiling point of water in Celsius?,100°C,factual_close
+63,What is the capital of France?,Paris,factual_close
+64,Who wrote '1984'?,George Orwell,factual_close
+65,What gas do plants absorb for photosynthesis?,Carbon dioxide,factual_close
+66,What is the largest continent?,Asia,factual_close
+67,What is the capital of Germany?,Berlin,factual_close
+68,Who composed the Four Seasons?,Antonio Vivaldi,factual_close
+69,What is the smallest prime number?,2,factual_close
+70,Who was the first person on the Moon?,Neil Armstrong,factual_close
+71,What is the capital of the United Kingdom?,London,factual_close
+72,What is the chemical symbol for gold?,Au,factual_close
+73,Which planet has rings?,Saturn,factual_close
+74,What is the capital of Portugal?,Lisbon,factual_close
+75,Who invented the telephone?,Alexander Graham Bell,factual_close
+76,Which element has atomic number 1?,Hydrogen,factual_close
+77,What is the capital of Argentina?,Buenos Aires,factual_close
+78,What is the longest river in Africa?,Nile,factual_close
+79,Who painted The Starry Night?,Vincent van Gogh,factual_close
+80,What is the capital of Australia?,Canberra,factual_close
+81,What is the currency of the United Kingdom?,Pound,factual_close
+82,What is the chemical symbol for Sodium?,Na,factual_close
+83,Who wrote 'Pride and Prejudice'?,Jane Austen,factual_close
+84,What is the tallest building in the world?,Burj Khalifa,factual_close
+85,What is the capital of Norway?,Oslo,factual_close
+86,What is the capital of Sweden?,Stockholm,factual_close
+87,What is the capital of Greece?,Athens,factual_close
+88,What is the capital of Mexico?,Mexico City,factual_close
+89,Who discovered gravity?,Isaac Newton,factual_close
+90,What is the largest mammal?,Blue whale,factual_close
+91,Which planet is closest to the Sun?,Mercury,factual_close
+92,Who painted The Last Supper?,Leonardo da Vinci,factual_close
+93,What is the capital of South Korea?,Seoul,factual_close
+94,What is the national language of Brazil?,Portuguese,factual_close
+95,What is the capital of Switzerland?,Bern,factual_close
+96,What is the capital of Belgium?,Brussels,factual_close
+97,What is the capital of Finland?,Helsinki,factual_close
+98,Who wrote 'The Catcher in the Rye'?,J. D. Salinger,factual_close
+99,Who wrote 'The Great Gatsby'?,F. Scott Fitzgerald,factual_close
