@@ -1,0 +1,101 @@
+id,prompt,reference_answer,category
+1,Explain why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+2,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+3,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+4,Explain the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+5,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+6,Explain how vaccines work.,Vaccines introduce harmless components of pathogens to train the immune system to recognize and fight real infections.,scientific_explanation
+7,Describe how climate change affects oceans.,"Climate change warms oceans, increases acidity, reduces oxygen levels, and disrupts marine ecosystems.",environment
+8,Why is empathy important in communication?,"Empathy enables people to understand others’ emotions, reducing conflict and improving communication.",social_reasoning
+9,Explain why biodiversity matters.,"Biodiversity supports ecosystem stability, resilience, and essential services like pollination.",environment
+10,Describe the purpose of education.,"Education develops knowledge, critical thinking, practical skills, and social awareness.",education
+11,Why do humans sleep?,"Humans sleep to restore energy, regulate hormones, consolidate memory, and support physical repair.",health
+12,Explain how the internet works at a high level.,The internet is a global network that transfers data between devices using protocols and routers.,technical_explanation
+13,Describe why teamwork improves results.,"Teamwork combines diverse skills, enhances creativity, and distributes work efficiently.",reasoning
+14,Why do humans create art?,"Humans create art to express emotion, explore ideas, and reflect cultural identity.",social_reasoning
+15,Explain why ecosystems need predators.,"Predators maintain population balance, prevent overgrazing, and support biodiversity.",scientific_explanation
+16,Explain how memories are formed.,"Memories form when the brain encodes experiences, strengthens neural connections, and stores the information for future retrieval.",psychology
+17,Why is problem-solving important?,"Problem-solving helps people overcome obstacles, make decisions, and adapt to new situations.",reasoning
+18,Describe how renewable energy reduces pollution.,Renewable energy produces fewer emissions and relies on sustainable resources.,environment
+19,Why do countries trade goods?,"Countries trade to access resources they lack, improve economic efficiency, and lower costs.",economics
+20,Explain why reading improves vocabulary.,"Reading exposes individuals to new words in context, strengthening language skills.",education
+21,Why is self-discipline valuable?,"Self-discipline helps individuals stay focused, achieve goals, and resist distractions.",psychology
+22,Describe how digestion works.,Digestion breaks down food into nutrients using enzymes and organs like the stomach and intestines.,biology
+23,Explain why air pollution is harmful.,"Air pollution damages lungs, affects climate, harms ecosystems, and increases disease risk.",environment
+24,Why is scientific research necessary?,"Research expands knowledge, solves global challenges, and drives technological progress.",scientific_explanation
+25,Explain how transportation influences the economy.,"Transportation enables trade, mobility, and economic development.",economics
+26,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+27,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+28,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+29,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+30,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+31,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+32,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+33,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+34,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+35,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+36,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+37,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+38,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+39,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+40,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+41,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+42,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+43,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+44,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+45,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+46,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+47,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+48,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+49,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+50,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+51,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+52,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+53,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+54,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+55,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+56,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+57,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+58,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+59,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+60,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+61,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+62,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+63,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+64,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+65,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+66,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+67,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+68,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+69,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+70,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+71,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+72,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+73,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+74,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+75,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+76,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+77,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+78,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+79,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+80,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+81,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+82,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+83,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+84,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+85,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+86,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+87,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+88,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+89,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+90,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+91,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+92,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+93,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+94,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+95,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+96,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
+97,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
+98,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
+99,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
+100,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
