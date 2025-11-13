@@ -1,0 +1,18 @@
+run_name: "eval-v1"
+
+global:
+  dataset_version: "v1"
+
+inference:
+  model_id: "o4-mini"
+  azure_endpoint: "https://openai-eygpt.openai.azure.com/"
+  azure_api_key: ""
+  azure_api_version: "2024-12-01-preview" 
+  temperature: 0.0
+  max_tokens: 2000
+  n_workers: 6
+  qps_limit: 2
+  timeout_s: 90
+
+
+
