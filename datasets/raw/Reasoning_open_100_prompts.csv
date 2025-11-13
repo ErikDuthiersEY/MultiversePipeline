@@ -24,78 +24,78 @@ id,prompt,reference_answer,category
 23,Explain why air pollution is harmful.,"Air pollution damages lungs, affects climate, harms ecosystems, and increases disease risk.",environment
 24,Why is scientific research necessary?,"Research expands knowledge, solves global challenges, and drives technological progress.",scientific_explanation
 25,Explain how transportation influences the economy.,"Transportation enables trade, mobility, and economic development.",economics
-26,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-27,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-28,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-29,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-30,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-31,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-32,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-33,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-34,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-35,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-36,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-37,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-38,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-39,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-40,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-41,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-42,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-43,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-44,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-45,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-46,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-47,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-48,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-49,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-50,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-51,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-52,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-53,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-54,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-55,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-56,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-57,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-58,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-59,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-60,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-61,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-62,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-63,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-64,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-65,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-66,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-67,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-68,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-69,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-70,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-71,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-72,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-73,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-74,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-75,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-76,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-77,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-78,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-79,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-80,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-81,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-82,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-83,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-84,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-85,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-86,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-87,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-88,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-89,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-90,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-91,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-92,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-93,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-94,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-95,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
-96,Describe why the sky appears blue.,"The sky appears blue because molecules in the atmosphere scatter shorter wavelengths of sunlight—particularly blue—more efficiently, sending more blue light toward our eyes.",scientific_explanation
-97,Describe how photosynthesis works in simple terms.,"Photosynthesis allows plants to convert sunlight, water, and carbon dioxide into glucose for energy, releasing oxygen as a byproduct.",scientific_explanation
-98,Why do people form social groups?,"People form social groups for support, cooperation, shared identity, safety, and resource exchange.",social_reasoning
-99,Describe the importance of critical thinking.,"Critical thinking helps individuals evaluate information objectively, identify bias, and make informed decisions.",reasoning
-100,Why is exercise beneficial for mental health?,"Exercise releases endorphins, reduces stress hormones, improves sleep, and boosts mood.",health
+26,Explain how earthquakes are caused.,"Earthquakes are caused by the sudden release of energy in the Earth's crust, creating seismic waves.",scientific_explanation
+27,Why do animals migrate?,"Animals migrate to find food, breeding grounds, or to escape harsh weather conditions.",scientific_explanation
+28,Describe the role of leaders in society.,"Leaders guide communities, make decisions, and inspire collective action.",social_reasoning
+29,Explain the benefits of lifelong learning.,"Lifelong learning enhances adaptability, personal growth, and career opportunities.",reasoning
+30,Why is meditation good for stress relief?,"Meditation calms the mind, reduces cortisol levels, and promotes relaxation.",health
+31,Describe how solar power is generated.,"Solar power is generated by photovoltaic cells that convert sunlight into electricity.",scientific_explanation
+32,Why do cultures develop traditions?,"Cultures develop traditions to preserve history, foster identity, and strengthen bonds.",social_reasoning
+33,Explain why ethical decision-making matters.,"Ethical decision-making builds trust, ensures fairness, and promotes long-term success.",reasoning
+34,How does nutrition affect physical performance?,"Nutrition provides energy, supports muscle repair, and boosts overall health.",health
+35,Describe the impact of deforestation on climate.,"Deforestation reduces carbon absorption, increases CO2 levels, and alters weather patterns.",environment
+36,Why is history important for the present?,"History provides lessons, shapes identity, and informs future decisions.",education
+37,Explain the concept of emotional intelligence.,"Emotional intelligence is the ability to recognize, understand, and manage emotions effectively.",psychology
+38,Describe the process of cell division.,"Cell division is the process by which a cell divides into two daughter cells, essential for growth and repair.",biology
+39,Why do markets fluctuate?,"Markets fluctuate due to supply and demand, economic news, and investor sentiment.",economics
+40,Explain how computers process data.,"Computers process data through hardware components like CPU, using binary code and instructions.",technical_explanation
+41,Why is conservation of water important?,"Conservation of water preserves resources, prevents shortages, and protects ecosystems.",environment
+42,Describe the advantages of remote work.,"Remote work offers flexibility, reduced commute, and better work-life balance.",reasoning
+43,Why do people seek adventure?,"People seek adventure for excitement, personal growth, and to break routine.",social_reasoning
+44,Explain the water cycle.,"The water cycle involves evaporation, condensation, precipitation, and collection of water on Earth.",scientific_explanation
+45,Why is gratitude beneficial for well-being?,"Gratitude shifts focus to positive aspects, reduces stress, and improves relationships.",health
+46,Describe how democracy functions.,"Democracy functions through elected representatives, voting, and protection of rights.",social_reasoning
+47,Explain why innovation drives progress.,"Innovation solves problems, improves efficiency, and creates new opportunities.",reasoning
+48,How does pollution affect wildlife?,"Pollution contaminates habitats, causes health issues, and disrupts food chains in wildlife.",environment
+49,Why is mathematics foundational to science?,"Mathematics provides the language and tools for modeling, predicting, and analyzing scientific phenomena.",education
+50,Describe the stages of grief.,"The stages of grief include denial, anger, bargaining, depression, and acceptance.",psychology
+51,Explain how enzymes work in digestion.,"Enzymes speed up chemical reactions to break down food into absorbable nutrients.",biology
+52,Why do companies invest in research?,"Companies invest in research to develop new products, stay competitive, and meet market needs.",economics
+53,Describe how wireless internet works.,"Wireless internet uses radio waves to transmit data between devices and access points.",technical_explanation
+54,Why is recycling important for sustainability?,"Recycling conserves resources, reduces waste, and lowers environmental impact.",environment
+55,Explain the value of patience in relationships.,"Patience allows understanding, reduces conflicts, and builds stronger bonds.",social_reasoning
+56,Why is creative thinking essential in problem-solving?,"Creative thinking generates novel ideas, overcomes obstacles, and finds innovative solutions.",reasoning
+57,Describe the benefits of yoga for body and mind.,"Yoga improves flexibility, reduces stress, enhances focus, and promotes overall health.",health
+58,Explain how volcanoes erupt.,"Volcanoes erupt when magma rises to the surface due to pressure buildup in the Earth's crust.",scientific_explanation
+59,Why do societies create laws?,"Societies create laws to maintain order, protect rights, and ensure justice.",social_reasoning
+60,Describe the impact of technology on education.,"Technology enhances access to information, enables interactive learning, and personalizes education.",education
+61,Explain the fight-or-flight response.,"The fight-or-flight response is a physiological reaction to stress, preparing the body for action.",psychology
+62,How does the respiratory system work?,"The respiratory system exchanges oxygen and carbon dioxide through breathing and gas exchange in lungs.",biology
+63,Why is diversification important in investments?,"Diversification spreads risk, stabilizes returns, and protects against market volatility.",economics
+64,Explain how encryption protects data.,"Encryption scrambles data using algorithms, making it unreadable without the key.",technical_explanation
+65,Describe how urbanization affects biodiversity.,"Urbanization destroys habitats, fragments ecosystems, and increases pollution, harming biodiversity.",environment
+66,Why is forgiveness important for personal growth?,"Forgiveness releases resentment, promotes emotional healing, and allows moving forward.",psychology
+67,Explain the role of pollinators in agriculture.,"Pollinators transfer pollen, enabling plant reproduction and crop production essential for food.",scientific_explanation
+68,Why do teams need clear communication?,"Clear communication prevents misunderstandings, boosts efficiency, and fosters collaboration.",social_reasoning
+69,Describe how budgeting helps financial health.,"Budgeting tracks spending, prioritizes needs, and builds savings for financial stability.",economics
+70,Why is adaptability key to success?,"Adaptability allows navigating change, learning from failures, and seizing opportunities.",reasoning
+71,Explain the greenhouse effect.,"The greenhouse effect traps heat in the atmosphere through gases, warming the planet.",scientific_explanation
+72,Describe the benefits of volunteering.,"Volunteering builds community, develops skills, and provides personal fulfillment.",social_reasoning
+73,Why is sleep hygiene important?,"Sleep hygiene promotes quality rest, regulates sleep cycles, and improves daily functioning.",health
+74,How does erosion shape landscapes?,"Erosion wears away rock and soil by wind, water, and ice, forming valleys and coasts.",scientific_explanation
+75,Explain why diversity in workplaces matters.,"Diversity brings varied perspectives, enhances innovation, and improves problem-solving.",social_reasoning
+76,Describe the process of learning a new language.,"Learning a new language involves immersion, practice, and consistent exposure to build fluency.",education
+77,Why is resilience important in facing challenges?,"Resilience helps bounce back from setbacks, maintain motivation, and achieve long-term goals.",psychology
+78,Describe the human circulatory system.,"The circulatory system transports blood, oxygen, and nutrients throughout the body via heart and vessels.",biology
+79,Why do interest rates affect the economy?,"Interest rates influence borrowing, spending, and investment, impacting growth and inflation.",economics
+80,Explain how search engines work.,"Search engines crawl, index, and rank web pages based on relevance to user queries.",technical_explanation
+81,Describe the causes of soil degradation.,"Soil degradation is caused by overuse, erosion, pollution, and climate change.",environment
+82,Why is active listening crucial in conversations?,"Active listening shows respect, improves understanding, and strengthens relationships.",social_reasoning
+83,Explain the importance of evidence in arguments.,"Evidence supports claims, increases credibility, and allows for objective evaluation.",reasoning
+84,How does hydration benefit cognitive function?,"Hydration maintains brain cell function, improves concentration, and prevents fatigue.",health
+85,Describe how fossils form.,"Fossils form when organisms are buried quickly, minerals replace organic material over time.",scientific_explanation
+86,Why do people pursue hobbies?,"People pursue hobbies for relaxation, creativity, skill development, and joy.",psychology
+87,Explain the basics of supply and demand.,"Supply and demand determine prices: high demand or low supply raises prices.",economics
+88,Describe how Bluetooth technology functions.,"Bluetooth uses short-range radio waves to connect devices wirelessly for data transfer.",technical_explanation
+89,Why is habitat preservation vital?,"Habitat preservation protects species, maintains biodiversity, and supports ecosystem services.",environment
+90,Explain the role of mentors in career development.,"Mentors provide guidance, feedback, and networks to accelerate professional growth.",education
+91,Why is mindfulness helpful for anxiety?,"Mindfulness grounds in the present, reduces rumination, and calms the nervous system.",health
+92,Describe the process of evaporation.,"Evaporation is the change of liquid to gas, driven by heat, increasing humidity.",scientific_explanation
+93,Why do conflicts arise in groups?,"Conflicts arise from differing views, resource scarcity, or poor communication.",social_reasoning
+94,Explain why reflection improves performance.,"Reflection identifies strengths and weaknesses, leading to better strategies and growth.",reasoning
+95,How does music influence emotions?,"Music triggers brain responses, evokes memories, and regulates mood through rhythm and melody.",psychology
+96,Describe the nitrogen cycle.,"The nitrogen cycle converts nitrogen between forms for use by living organisms via fixation and denitrification.",biology
+97,Why is global trade beneficial?,"Global trade fosters economic growth, cultural exchange, and access to diverse goods.",economics
+98,Explain how AI learns from data.,"AI learns from data using algorithms to identify patterns and make predictions.",technical_explanation
+99,Describe the effects of ocean currents on climate.,"Ocean currents distribute heat, influence weather patterns, and regulate global temperatures.",environment
+100,Why is curiosity a driver of discovery?,"Curiosity motivates exploration, questions assumptions, and leads to innovative breakthroughs.",reasoning
