@@ -1,5 +1,6 @@
 import argparse, time, json, yaml
 import pandas as pd 
+import threading
 from pathlib import Path 
 from openai import AzureOpenAI
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -22,6 +23,22 @@ def make_client(cfg: dict) -> AzureOpenAI:
         timeout=infer_cfg["timeout_s"],
     )
     return client
+
+class QPSThrottle:
+    """Simple global QPS limiter shared by all threads in this process."""
+    def __init__(self, qps: float):
+        self.qps = max(qps, 0.0001)
+        self.min_interval = 1.0 / self.qps
+        self._lock = threading.Lock()
+        self._last = 0.0
+
+    def wait(self):
+        with self._lock:
+            now = time.time()
+            delta = now - self._last
+            if delta < self.min_interval:
+                time.sleep(self.min_interval - delta)
+            self._last = time.time()
 
 def call_model(client: AzureOpenAI, prompt: str, cfg: dict) -> dict:
     """
@@ -80,15 +97,40 @@ def main():
         return 
     
     n_workers = int(cfg["inference"]["n_workers"])
+    qps_limit = float(cfg["inference"]["qps_limit"])
     client = make_client(cfg)
+    throttle = QPSThrottle(qps_limit)
     
     for f in parquet_files: 
         task = f.stem
         print(f"\n=== Processing dataset: {task} ===")
+
         df = pd.read_parquet(f)
+
+        out_path = out_dir / f"raw_output_{task}.parquet"
+
+        #checkpoint 
+        existing_df = None 
+        done_ids = set() 
+        if out_path.exists(): 
+            print(f"Found existing file for {task}: {out_path}")
+            try: 
+                existing_df = pd.read_parquet(out_path)
+                done_ids = set(existing_df["prompt_id"].astype(str).tolist())
+                print(f"Already completed prompts: {len(done_ids)}")
+            except Exception as e:
+                print(f"Warning: could not read existing {out_path} ({e}). "
+                      f"Re-running all prompts for this dataset.")
+        if done_ids:
+            df = df[~df["id"].astype(str).isin(done_ids)]
+
+        if df.empty: 
+            print("No remaining prompts to run for this dataset.")
+            continue
+                
         total = len(df)
         print(f"Total prompts: {total}")
-        print(f"Using {n_workers} workers\n")
+        print(f"Using {n_workers} workers, QPS limit ≈ {qps_limit} req/s\n")
 
         rows = []
         completed = 0
@@ -97,6 +139,8 @@ def main():
             """
             Function executed by each thread.
             """
+            throttle.wait()
+
             t0 = time.time()
             res = call_model(client, prompt, cfg)
             latency_ms = int((time.time() - t0) * 1000)
@@ -127,10 +171,16 @@ def main():
                 completed += 1
                 rows.append(future.result())
                 print(f"Completed {completed}/{total} prompts", end="\r")
-                
-        out_path = out_dir / f"raw_output_{task}.parquet"
-        pd.DataFrame(rows).to_parquet(out_path, index=False)
-        print(f"[OK] Wrote {out_path}")
+
+        new_df = pd.DataFrame(rows) 
+
+        if existing_df is not None and not existing_df.empty:
+            final_df = pd.concat([existing_df, new_df], ignore_index=True)
+        else: 
+            final_df = new_df
+
+        final_df.to_parquet(out_path, index=False)     
+        print(f"\n[OK] Wrote {out_path} ({len(final_df)} total rows)\n")
 
 if __name__ == "__main__": 
     main()
