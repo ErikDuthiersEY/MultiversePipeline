@@ -7,8 +7,8 @@ import argparse
 import yaml
 from typing import Dict, Any
 
-from src.utils.hashing import compute_run_hash
-from src.components.rule_based_metrics.rule_based_metrics import compute_rule_based_metrics
+#from src.utils.hashing import compute_run_hash
+from rule_based_metrics.rule_based_metrics import compute_rule_based_metrics
 
 def main():
     parser = argparse.ArgumentParser(description="Run rule-based metrics computation.")
