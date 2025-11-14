@@ -14,5 +14,20 @@ inference:
   qps_limit: 2
   timeout_s: 90
 
+rule_based_metrics: 
+  tasks:
+    - reasoning_closed
+    - reasoning_open
+    - summarization
+    - sensitivity_variations
+  models: []  
+  rouge_n: 2
+  compute_averages: true
+  hash: "auto"  
+  run_name: "multiverse-rule-metrics-multi"
+  description: "Rule-based metrics for multiple models"
+  use_deepeval: true  
+  verbose_mode: false  
+
 
 
