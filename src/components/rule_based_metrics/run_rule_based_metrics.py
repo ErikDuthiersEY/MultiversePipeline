@@ -13,14 +13,14 @@ from src.components.rule_based_metrics.rule_based_metrics import compute_rule_ba
 def main():
     parser = argparse.ArgumentParser(description="Run rule-based metrics computation.")
     parser.add_argument("--config", default="configs/rule_based_metrics.yaml", help="Path to rule_based_metrics.yaml")
-    parser.add_argument("--raw_path", default="outputs/raw_output.parquet", help="Path to raw_output.parquet from inference")  
+    parser.add_argument("--raw_dir", default="outputs/inference", help="Input dir for raw_output.parquet from inference")  # <-- NUEVO: Para Azure ${{inputs.raw_dir}}
+    parser.add_argument("--raw_path", default=None, help="Direct path to raw_output.parquet (overrides raw_dir)")  # Opcional, para compatibilidad local
     parser.add_argument("--datasets", default="datasets/processed", help="Path to datasets dir")
-    parser.add_argument("--out_dir", default="outputs", help="Output dir for obj_scores")  # <-- CAMBIADO: Ahora "outputs" directo, sin /metrics
+    parser.add_argument("--out_dir", default="outputs", help="Output dir for obj_scores.parquet")  # <-- AJUSTADO: Para Azure ${{outputs.out_dir}}, suelto en outputs/
     parser.add_argument("--dataset_version", default="v1", help="Dataset version")
     parser.add_argument("--code_version", default="v0.1", help="Code version (e.g., from git)")
     args = parser.parse_args()
 
-    # Load config
     config_path = Path(args.config)
     with open(config_path, "r") as f:
         config: Dict[str, Any] = yaml.safe_load(f)
@@ -36,9 +36,12 @@ def main():
     # )
     # print(f"Generated run_hash: {run_hash}")
 
-    # Paths  # <-- AJUSTADO: Output fijo sin {run_hash}
-    raw_outputs_path = Path(args.raw_path)
-    obj_scores_path = Path(args.out_dir) / "obj_scores.parquet"  # Ahora: outputs/obj_scores.parquet
+    # Paths  # Usa raw_dir para input, out_dir fijo sin {run_hash}
+    if args.raw_path:
+        raw_outputs_path = Path(args.raw_path) 
+    else:
+        raw_outputs_path = Path(args.raw_dir) / "raw_output.parquet"  
+    obj_scores_path = Path(args.out_dir) / "obj_scores.parquet" 
     datasets_root = Path(args.datasets)
 
     # Check if already exists  # Desactivado para siempre sobrescribir
@@ -61,7 +64,7 @@ def main():
         compute_averages=config.get("compute_averages", True),
         verbose=config.get("verbose_mode", False)
     )
-    print(f"Rule-based metrics computed and saved to {obj_scores_path}")  # Sin run_hash en print
+    print(f"Rule-based metrics computed and saved to {obj_scores_path}")
 
 if __name__ == "__main__":
     main()
