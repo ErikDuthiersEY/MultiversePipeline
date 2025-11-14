@@ -9,7 +9,6 @@ from azure.ai.ml.constants import AssetTypes
 
 load_dotenv()
 
-# === CONFIGURACION ===
 ROOT_DIR = Path.cwd()
 PARQUET_DIR = ROOT_DIR / "datasets" / "processed"
 
@@ -18,15 +17,12 @@ RESOURCE_GROUP = os.getenv("AZ_RESOURCE_GROUP")
 WORKSPACE_NAME = os.getenv("AZ_ML_WORKSPACE")
 MODE = "files"                            
 VERSION = "1"                          # Versión base; se incrementará si existe
-ASSET_PREFIX = "eval_"                     
 ASSET_NAME = "evaluation_parquet_bundle"    
 DATASTORE = None                           
 
-# Verifica vars de Azure
 if not all([SUBSCRIPTION_ID, RESOURCE_GROUP, WORKSPACE_NAME]):
     raise ValueError("Faltan variables en .env: AZ_SUBSCRIPTION_ID, AZ_RESOURCE_GROUP o AZ_ML_WORKSPACE.")
 
-# Verifica carpeta
 assert PARQUET_DIR.exists(), f"No existe {PARQUET_DIR}"
 files = list(PARQUET_DIR.glob("*.parquet"))
 print(f"Encontrados {len(files)} .parquet en {PARQUET_DIR}")
@@ -36,12 +32,12 @@ cred = InteractiveBrowserCredential()
 ml_client = MLClient(cred, SUBSCRIPTION_ID, RESOURCE_GROUP, WORKSPACE_NAME)
 print(f"Conectado a workspace: {ml_client.workspace_name}")
 
-# Función helper: Encuentra versión única para un nombre de asset
+# Función helper
 def get_unique_version(ml_client, asset_name: str, base_version: str) -> str:
     version = int(base_version)
     while True:
         try:
-            # Intenta listar versiones; si existe esta versión, incrementa
+    
             existing = ml_client.data.get(name=asset_name, version=str(version))
             print(f"Asset {asset_name}:{version} ya existe. Intentando versión {version + 1}...")
             version += 1
@@ -80,8 +76,7 @@ def register_folder(ml_client, folder: Path, name: str, base_version: str, datas
 # Procesar
 if MODE == "files":
     for f in sorted(files):
-        stem = f.stem.strip().replace(" ", "_").lower()
-        name = f"{ASSET_PREFIX}{stem}"
+        name = f.stem  # Usa exactamente el stem del archivo Parquet, sin prefijos ni modificaciones
         register_file(ml_client, f, name, VERSION, DATASTORE)
 else:
     register_folder(ml_client, PARQUET_DIR, ASSET_NAME, VERSION, DATASTORE)
