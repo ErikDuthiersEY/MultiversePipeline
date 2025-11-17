@@ -179,6 +179,12 @@ def compute_rule_based_metrics(
 
     raw_df = pd.read_parquet(raw_path)
     
+    if verbose:
+            print("\n=== DEBUG: Loaded raw_df ===")
+            print(f"[raw_df] shape: {raw_df.shape}")
+            print(f"[raw_df] cols: {list(raw_df.columns)}")
+            print(raw_df.head(5))
+            print("==============================\n")
 
     raw_df['prompt_id'] = raw_df['prompt_id'].astype(str)
 
@@ -186,20 +192,30 @@ def compute_rule_based_metrics(
     models = raw_df['model'].unique()
     
     for model in models:
+        if verbose:
+            print(f"\n--- Processing model: {model} ---")
+
         model_results = {'model': model}
         model_raw = raw_df[raw_df['model'] == model]
         
         for task in tasks:
             if verbose:
-                print(f"Processing {task} for model {model}")
+                print(f"\nProcessing task: {task} for model {model}")
             
             task_raw = model_raw[model_raw['task'] == task]
             if len(task_raw) == 0:
                 if verbose:
-                    print(f"No data for {task} in model {model}")
+                    print(f"[DEBUG] No data found for task '{task}' in model '{model}'. Skipping.")
                 continue
             
             ref_df = load_dataset(task, datasets_root)
+
+            if verbose:
+                print(f"=== DEBUG: Loaded ref_df for task: {task} ===")
+                print(f"[ref_df] shape: {ref_df.shape}")
+                print(f"[ref_df] cols: {list(ref_df.columns)}")
+                print(ref_df.head(5))
+                print("============================================\n")
             
             task_key, mean_score, std_score = process_task(task_raw, ref_df, task, rouge_n, use_deepeval)
             
@@ -221,5 +237,7 @@ def compute_rule_based_metrics(
     
     out_df.to_parquet(out_path, index=False)
     if verbose:
-        print(f"Saved metrics to {out_path}")
+        print("\n=== DEBUG: Final metrics dataframe ===")
         print(out_df.head())
+        print(f"Saved metrics to {out_path}")
+        print("======================================\n")
