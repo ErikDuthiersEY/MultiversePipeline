@@ -4,10 +4,14 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Any
 import yaml  
 
+import unicodedata
+import string
 from deepeval.metrics import ExactMatchMetric 
+from deepeval.test_case import LLMTestCase
 from rouge_score import rouge_scorer 
-from sklearn.feature_extraction.text import TfidfVectorizer 
-from sklearn.metrics.pairwise import cosine_similarity 
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
 
 
 def load_dataset(task: str, datasets_root: str) -> pd.DataFrame:
@@ -51,21 +55,64 @@ def load_dataset(task: str, datasets_root: str) -> pd.DataFrame:
     
     return df
 
+
 def compute_exact_match(predictions: List[str], references: List[str], use_deepeval: bool = True) -> np.ndarray:
-    """Compute Exact Match scores using DeepEval or simple string match."""
-    if use_deepeval:
-        metric = ExactMatchMetric(threshold=0.0, model=None)  
-        scores = []
-        for pred, ref in zip(predictions, references):
-            metric.measure(test_case={'input': '', 'actual_output': pred, 'expected_output': ref})  
-            scores.append(1.0 if metric.success else 0.0)
-            metric.reset()  
-        return np.array(scores)
-    else:
-        def normalize(s: str) -> str:
-            return " ".join(s.lower().split())
-        scores = [1.0 if normalize(p) == normalize(r) else 0.0 for p, r in zip(predictions, references)]
-        return np.array(scores)
+    """
+    Exact Match usando únicamente DeepEval,
+    pero con normalización avanzada para evitar fallos por:
+    - mayúsculas/minúsculas
+    - acentos
+    - puntuación
+    - saltos de línea
+    - espacios múltiples
+    - unicode inconsistente
+    """
+    def normalize(s: str) -> str:
+        if s is None:
+            return ""
+        
+        s = str(s)
+
+        # Normalizar unicode (muy importante para casos como "mañana")
+        s = unicodedata.normalize("NFKD", s)
+
+        # Minúsculas
+        s = s.lower()
+
+        # Quitar acentos (diacríticos)
+        s = "".join(c for c in s if not unicodedata.combining(c))
+
+        # Sustituir saltos de línea por espacios
+        s = s.replace("\n", " ").replace("\r", " ")
+
+        # Eliminar toda puntuación
+        s = "".join(c for c in s if c not in string.punctuation)
+
+        # Eliminar espacios múltiples
+        s = " ".join(s.split())
+
+        return s
+
+    scores = []
+
+    for pred, ref in zip(predictions, references):
+
+        pred_norm = normalize(pred)
+        ref_norm  = normalize(ref)
+
+        metric = ExactMatchMetric(threshold=1.0)
+
+        tc = LLMTestCase(
+            input="",
+            actual_output=pred_norm,
+            expected_output=ref_norm
+        )
+
+        metric.measure(tc)
+        scores.append(metric.score) 
+
+    return np.array(scores)
+
 
 def compute_semantic_similarity(predictions: List[str], references: List[str]) -> np.ndarray:
     """Compute semantic similarity using TF-IDF + cosine (local alternative to BERTScore)."""
@@ -75,59 +122,99 @@ def compute_semantic_similarity(predictions: List[str], references: List[str]) -
     sim_matrix = cosine_similarity(tfidf_matrix[:len(predictions)], tfidf_matrix[len(predictions):])
     return np.diag(sim_matrix)
 
-def compute_rouge(predictions: List[str], references: List[str], n: int = 2) -> np.ndarray:
-    """Compute ROUGE-n (F1) scores."""
-    scorer = rouge_scorer.RougeScorer([f'rouge{n}'], use_stemmer=True)
+
+def compute_rouge(predictions: List[str], references: List[str]) -> np.ndarray:
+    """Compute ROUGE-L (F1) scores."""
+    scorer = rouge_scorer.RougeScorer(['rougeL'], use_stemmer=True)
     scores = []
     for pred, ref in zip(predictions, references):
-        score = scorer.score(ref, pred) 
-        scores.append(score[f'rouge{n}'].fmeasure)
+        result = scorer.score(ref, pred)
+        scores.append(result['rougeL'].fmeasure)
     return np.array(scores)
 
-def compute_semantic_consistency(raw_df: pd.DataFrame, ref_df: pd.DataFrame) -> np.ndarray:
-    """Compute Semantic Consistency Score (cosine sim between original and variant outputs using TF-IDF).
-    Pairs: original vs paraphrase, original vs typo (avg per row)."""
-    scores = []
-    
 
-    all_outputs = raw_df['output'].fillna('').tolist()
+def compute_semantic_consistency(raw_df: pd.DataFrame, ref_df: pd.DataFrame) -> np.ndarray:
+    """
+    Semantic Consistency Score:
+    Evalúa si el modelo mantiene consistencia cuando el prompt cambia (paráfrasis o typos).
+    Se calcula la similitud coseno entre:
+        - output(original) vs output(paraphrase)
+        - output(original) vs output(typo)
+    Y se devuelve su media.
+
+    Mejoras respecto a la versión original:
+    - Normalización avanzada del texto (lowercase, unicode, espacios, saltos de línea)
+    - No se eliminan stopwords (mejor para respuestas cortas)
+    - max_features alto para evitar pérdida de vocabulario
+    - fallback seguro si falta algún output
+    """
+
+    def normalize_text(s: str) -> str:
+        if s is None:
+            return ""
+        s = str(s)
+
+        import unicodedata
+        s = unicodedata.normalize("NFKD", s)
+
+        # Minúsculas
+        s = s.lower()
+
+        # Sustituir saltos por espacios
+        s = s.replace("\n", " ").replace("\r", " ")
+
+        # Quitar espacios múltiples
+        s = " ".join(s.split())
+
+        return s
+
+    # Normalizar outputs
+    raw_df = raw_df.copy()
+    raw_df["output"] = raw_df["output"].fillna("").apply(normalize_text)
+
+    all_outputs = raw_df["output"].tolist()
     if len(all_outputs) == 0:
         return np.array([])
-    vectorizer = TfidfVectorizer(stop_words='english', max_features=1000)
+
+    vectorizer = TfidfVectorizer(
+        stop_words=None,      
+        max_features=3000,    
+    )
     tfidf_matrix = vectorizer.fit_transform(all_outputs)
-    
+
+    scores = []
+
     for _, row in ref_df.iterrows():
+        orig_p = row["prompt_original"]
+        para_p = row["prompt_paraphrase"]
+        typo_p = row["prompt_typo_variant"]
 
-        orig_prompt = row['prompt_original']
-        para_prompt = row['prompt_paraphrase']
-        typo_prompt = row['prompt_typo_variant']
-        
-        orig_row = raw_df[raw_df['prompt'] == orig_prompt]
-        para_row = raw_df[raw_df['prompt'] == para_prompt]
-        typo_row = raw_df[raw_df['prompt'] == typo_prompt]
-        
+        orig_row = raw_df[raw_df["prompt"] == orig_p]
+        para_row = raw_df[raw_df["prompt"] == para_p]
+        typo_row = raw_df[raw_df["prompt"] == typo_p]
+
         if len(orig_row) != 1 or len(para_row) != 1 or len(typo_row) != 1:
-            scores.append(0.0)  
+            scores.append(0.0)
             continue
-        
-        orig_output = orig_row.iloc[0]['output']
-        para_output = para_row.iloc[0]['output']
-        typo_output = typo_row.iloc[0]['output']
-        
- 
-        orig_idx = raw_df[raw_df['prompt'] == orig_prompt].index[0]
-        para_idx = raw_df[raw_df['prompt'] == para_prompt].index[0]
-        typo_idx = raw_df[raw_df['prompt'] == typo_prompt].index[0]
-        
 
-        sim_para = cosine_similarity(tfidf_matrix[orig_idx:orig_idx+1], tfidf_matrix[para_idx:para_idx+1])[0][0]
-  
-        sim_typo = cosine_similarity(tfidf_matrix[orig_idx:orig_idx+1], tfidf_matrix[typo_idx:typo_idx+1])[0][0]
-        
+        orig_idx = orig_row.index[0]
+        para_idx = para_row.index[0]
+        typo_idx = typo_row.index[0]
+
+        # Similaridades coseno
+        sim_para = cosine_similarity(
+            tfidf_matrix[orig_idx:orig_idx+1],
+            tfidf_matrix[para_idx:para_idx+1]
+        )[0][0]
+
+        sim_typo = cosine_similarity(
+            tfidf_matrix[orig_idx:orig_idx+1],
+            tfidf_matrix[typo_idx:typo_idx+1]
+        )[0][0]
 
         avg_sim = (sim_para + sim_typo) / 2
         scores.append(avg_sim)
-    
+
     return np.array(scores)
 
 def process_task(raw_df_task: pd.DataFrame, ref_df: pd.DataFrame, task: str, rouge_n: int, use_deepeval: bool) -> Tuple[str, np.ndarray, np.ndarray]:
