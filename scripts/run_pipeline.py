@@ -19,7 +19,8 @@ WS  = os.environ["AZ_ML_WORKSPACE"]
 ml = MLClient(DefaultAzureCredential(), SUB, RG, WS)
 
 env_path     = "configs/env/conda.yaml"
-datasets_dir = "azureml://subscriptions/3bcd6b3d-11a3-4a3e-9e9e-7beb46101ac4/resourcegroups/ws-multi-studio/workspaces/multistudioaml/datastores/workspaceblobstore/paths/LocalUpload/08b21c0155fa8a18f99328761587c1addeda207ab8427f782709f247889aea51/processed/"
+datasets_dir = "datasets/raw"
+#datasets_dir = "azureml://subscriptions/3bcd6b3d-11a3-4a3e-9e9e-7beb46101ac4/resourcegroups/ws-multi-studio/workspaces/multistudioaml/datastores/workspaceblobstore/paths/LocalUpload/08b21c0155fa8a18f99328761587c1addeda207ab8427f782709f247889aea51/processed/"
 config_path  = "configs/config.yaml"
 compute      = "metaverse-compute" 
 

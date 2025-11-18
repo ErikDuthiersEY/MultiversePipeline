@@ -44,10 +44,11 @@ def call_model(client: AzureOpenAI, prompt: str, cfg: dict) -> dict:
     """
 
     infer_cfg = cfg["inference"]
+    global_cfg = cfg["global"]
     
     try:
         resp = client.chat.completions.create(
-            model=infer_cfg["model_id"],                
+            model=global_cfg["base_model_id"],                
             messages=[{"role": "user", "content": prompt}],
             max_completion_tokens=infer_cfg["max_tokens"],
         )
@@ -58,7 +59,7 @@ def call_model(client: AzureOpenAI, prompt: str, cfg: dict) -> dict:
         usage = getattr(resp, "usage", None)
 
         return {
-            "model": infer_cfg["model_id"],
+            "model": global_cfg["base_model_id"],
             "output": content,
             "input_tokens": getattr(usage, "prompt_tokens", 0) if usage else 0,
             "output_tokens": getattr(usage, "completion_tokens", 0) if usage else 0,
@@ -68,7 +69,7 @@ def call_model(client: AzureOpenAI, prompt: str, cfg: dict) -> dict:
     
     except Exception as e:
         return {
-            "model": infer_cfg["model_id"],
+            "model": global_cfg["base_model_id"],
             "output": "",
             "input_tokens": 0,
             "output_tokens": 0,

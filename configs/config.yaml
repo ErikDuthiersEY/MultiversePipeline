@@ -1,10 +1,11 @@
 run_name: "eval-v1"
 
 global:
-  dataset_version: "v1"
+  dataset_version: "v1"  
+  base_model_id: "o4-mini" 
+  compressed_model_id: "" 
 
 inference:
-  model_id: "o4-mini"
   azure_endpoint: "https://openai-eygpt.openai.azure.com/"
   azure_api_key: ""
   azure_api_version: "2024-12-01-preview" 
@@ -29,6 +30,16 @@ rule_based_metrics:
   description: "Rule-based metrics for multiple models"
   use_deepeval: true  
   verbose_mode: true  
+
+llm_evaluated_metrics:
+  bias_task_name: "bias_dataset"            
+  hallucination_task_name: "hallucination"           
+  judge_model_id: "o4-mini"
+  azure_endpoint: "https://openai-eygpt.openai.azure.com/"
+  azure_api_key: ""
+  azure_api_version: "2024-12-01-preview" 
+  timeout_s: 90  
+  n_workers: 1 
 
 
 
