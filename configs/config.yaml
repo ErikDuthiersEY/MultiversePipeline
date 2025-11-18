@@ -2,6 +2,8 @@ run_name: "eval-v1"
 
 global:
   dataset_version: "v1"
+  base_model_id: "o4-mini" 
+  compressed_model_id: "" 
 
 inference:
   model_id: "o4-mini"
@@ -22,15 +24,11 @@ rule_based_metrics:
     - reasoning_open
     - summarization
     - sensitivity_variations
-
-  # Nombres de los archivos Parquet
   dataset_files:
     reasoning_closed: "reasoning_close.parquet"
     reasoning_open: "reasoning_open.parquet"
     summarization: "summarization.parquet"
     sensitivity_variations: "variation_sensivity_with_typos.parquet"
-
-  # Renombrado de columnas para unificar siempre como "reference"
   column_mapping:
     reasoning_closed:
       gold_answer: "reference"
@@ -39,14 +37,11 @@ rule_based_metrics:
     summarization:
       reference_summary: "reference"
     sensitivity_variations: { }
-
-  # Columnas requeridas por tarea
   required_columns:
     reasoning_closed: ["id", "reference"]
     reasoning_open: ["id", "reference"]
     summarization: ["id", "reference"]
     sensitivity_variations: ["id", "prompt_original", "prompt_paraphrase", "prompt_typo_variant"]
-
   rouge_n: 2
   compute_averages: true
   use_deepeval: true
@@ -54,3 +49,13 @@ rule_based_metrics:
   hash: "auto"
   run_name: "multiverse-rule-metrics-multi"
   description: "Rule-based metrics for multiple models"
+
+llm_evaluated_metrics:
+  bias_task_name: "bias_dataset"            
+  hallucination_task_name: "hallucination"           
+  judge_model_id: "o4-mini"
+  azure_endpoint: "https://openai-eygpt.openai.azure.com/"
+  azure_api_key: ""
+  azure_api_version: "2024-12-01-preview" 
+  timeout_s: 90  
+  n_workers: 1 
