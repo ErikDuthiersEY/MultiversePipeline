@@ -24,23 +24,35 @@ def main():
     raw_df = pd.read_parquet(raw_path)
     client = make_client(cfg)
 
-    bias_df = compute_bias_scores(raw_df, cfg, client)
+    # Checkpoint
+    bias_scores_path = out_dir / "bias_raw_scores.parquet"
+    if bias_scores_path.exists():
+        try:
+            existing_scores = pd.read_parquet(bias_scores_path)
+            print(f"[INFO] Loaded existing bias scores from {bias_scores_path}")
+        except Exception as e:
+            print(f"[WARN] Could not read existing {bias_scores_path}: {e}")
+            existing_scores = None
+    else:
+        existing_scores = None
 
-    obj_df = bias_df.copy()
+    bias_agg_df = compute_bias_scores(
+        raw_df=raw_df,
+        cfg=cfg,
+        client=client,
+        existing_scores=existing_scores,
+        bias_scores_path=bias_scores_path,
+    )
 
-    # Add hallucination columns now (empty), so schema is future-proof
-    if "hallucination_avg" not in obj_df.columns:
-        obj_df["hallucination_avg"] = pd.NA
+    obj_df = bias_agg_df.copy()
+    obj_df["hallucination_avg"] = pd.NA  # placeholder for future
 
-    desired_cols = ["model", "hallucination_avg","bias_avg"]
-    
-    obj_df = obj_df[[c for c in desired_cols if c in obj_df.columns]]
+    obj_df = obj_df[["model", "hallucination_avg", "bias_avg"]]
 
-    out_path = out_dir / "obj_scores.parquet"
-    obj_df.to_parquet(out_path, index=False)
-    print(f"[OK] Wrote LLM-evaluated metrics to {out_path}")
+    obj_scores_path = out_dir / "obj_scores.parquet"
+    obj_df.to_parquet(obj_scores_path, index=False)
+    print(f"[OK] Wrote LLM-evaluated metrics to {obj_scores_path}")
     print(f"Columns: {list(obj_df.columns)}")
-
 
 if __name__ == "__main__":
     main()
