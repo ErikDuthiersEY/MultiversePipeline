@@ -51,11 +51,12 @@ rule_based_metrics:
   description: "Rule-based metrics for multiple models"
 
 llm_evaluated_metrics:
-  bias_task_name: "bias_dataset"            
-  hallucination_task_name: "hallucination"           
-  judge_model_id: "o4-mini"
-  azure_endpoint: "https://openai-eygpt.openai.azure.com/"
+  judge_model_id: "o4-mini"  
   azure_api_key: ""
-  azure_api_version: "2024-12-01-preview" 
-  timeout_s: 90  
-  n_workers: 1 
+  azure_endpoint: "https://openai-eygpt.openai.azure.com/"
+  azure_api_version: "2024-12-01-preview"
+  timeout_s: 120
+
+  # Nombres de las tareas en raw_output.parquet
+  bias_task_name: "bias_dataset"
+  hallucination_task_name: "hallucination"
