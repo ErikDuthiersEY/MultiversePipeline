@@ -15,8 +15,8 @@ PARQUET_DIR = ROOT_DIR / "datasets" / "processed"
 SUBSCRIPTION_ID = os.getenv("AZ_SUBSCRIPTION_ID")
 RESOURCE_GROUP = os.getenv("AZ_RESOURCE_GROUP")
 WORKSPACE_NAME = os.getenv("AZ_ML_WORKSPACE")
-MODE = "files"                            
-VERSION = "1"                          # Versión base; se incrementará si existe
+MODE = "folder" 
+VERSION = "1"   
 ASSET_NAME = "evaluation_parquet_bundle"    
 DATASTORE = None                           
 
