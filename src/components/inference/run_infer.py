@@ -46,8 +46,8 @@ def main():
 
     for f in parquet_files: 
         task = f.stem
-        if task != "reasoning_open":
-            continue
+        #if task != "reasoning_open":
+        #    continue
         print(f"\n=== Processing dataset: {task} ===")
 
         df = pd.read_parquet(f)
