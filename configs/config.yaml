@@ -39,12 +39,14 @@ rule_based_metrics:
     - reasoning_closed
     - reasoning_open
     - summarization
-    - sensitivity_variations
+    - variation_sensitivity   
+
   dataset_files:
     reasoning_closed: "reasoning_close.parquet"
     reasoning_open: "reasoning_open.parquet"
     summarization: "summarization.parquet"
-    sensitivity_variations: "variation_sensivity_with_typos.parquet"
+    variation_sensitivity: "variation_sensitivity.parquet" 
+
   column_mapping:
     reasoning_closed:
       gold_answer: "reference"
@@ -52,12 +54,14 @@ rule_based_metrics:
       reference_answer: "reference"
     summarization:
       reference_summary: "reference"
-    sensitivity_variations: { }
+    variation_sensitivity: {}   
+
   required_columns:
     reasoning_closed: ["id", "reference"]
     reasoning_open: ["id", "reference"]
     summarization: ["id", "reference"]
-    sensitivity_variations: ["id", "prompt_original", "prompt_paraphrase", "prompt_typo_variant"]
+    variation_sensitivity: ["id", "prompt", "group_id"] 
+
   rouge_n: 2
   compute_averages: true
   use_deepeval: true
