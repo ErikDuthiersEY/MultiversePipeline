@@ -60,27 +60,71 @@ def load_dataset(task: str, datasets_root: str, config: Dict[str, Any]) -> pd.Da
     return df
 
 
-def compute_exact_match(predictions: List[str], references: List[str], use_deepeval: bool = True) -> np.ndarray:
-    def normalize(s: str) -> str:
-        if s is None:
+import re
+
+def compute_exact_match(predictions: List[str], references: List[str]) -> np.ndarray:
+    """
+    Exact Match REALISTA para tareas closed-ended (math, factual, yes/no, etc.)
+    - Extrae la respuesta final del modelo (boxed, último número, etc.)
+    - Compara solo la respuesta final con la referencia
+    - Usada en GSM8K, MATH, MMLU, etc.
+    """
+    def extract_final_answer(text: str) -> str:
+        if not text:
             return ""
+        
+        text = str(text)
+
+        boxed = re.search(r'\\boxed\{([^}]*)\}', text)
+        if boxed:
+            return boxed.group(1).strip()
+        
+
+        final_patterns = [
+            r'respuesta final\s*[:\-]?\s*(.+?)(?:\n|$)',
+            r'final answer\s*[:\-]?\s*(.+?)(?:\n|$)',
+            r'la respuesta es\s+(.+?)(?:\n|$)',
+            r'the answer is\s+(.+?)(?:\n|$)'
+        ]
+        for pattern in final_patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match:
+                return match.group(1).strip()
+        
+
+        numbers = re.findall(r'-?\d+\.?\d*', text)
+        if numbers:
+            return numbers[-1]
+
+        lines = text.strip().split('\n')
+        for line in reversed(lines):
+            line_clean = line.lower()
+            if any(word in line_clean for word in ["respuesta", "answer", "final", "boxed"]):
+                continue
+
+            candidate = re.sub(r'[^\w\s\-]', '', line).strip()
+            if candidate and len(candidate.split()) <= 5:
+                return candidate
+        
+        return text.strip().split()[-1] if text.strip() else ""
+
+    def normalize(s: str) -> str:
         s = str(s)
-        s = unicodedata.normalize("NFKD", s)
-        s = s.lower()
+        s = unicodedata.normalize("NFKD", s.lower())
         s = "".join(c for c in s if not unicodedata.combining(c))
-        s = s.replace("\n", " ").replace("\r", " ")
-        s = "".join(c for c in s if c not in string.punctuation)
-        s = " ".join(s.split())
+        s = s.replace(",", ".").strip()
         return s
 
     scores = []
     for pred, ref in zip(predictions, references):
-        pred_norm = normalize(pred)
+        pred_answer = extract_final_answer(pred)
         ref_norm = normalize(ref)
-        metric = ExactMatchMetric(threshold=1.0)
-        tc = LLMTestCase(input="", actual_output=pred_norm, expected_output=ref_norm)
-        metric.measure(tc)
-        scores.append(metric.score)
+        pred_norm = normalize(pred_answer)
+
+        if pred_norm == ref_norm or pred_norm in ref_norm or ref_norm in pred_norm:
+            scores.append(1.0)
+        else:
+            scores.append(0.0)
 
     return np.array(scores)
 
@@ -259,11 +303,14 @@ def compute_refusal_correctness(raw_df_task: pd.DataFrame) -> np.ndarray:
 def process_task(raw_df_task: pd.DataFrame, ref_df: pd.DataFrame, task: str, rouge_n: int, use_deepeval: bool) -> Tuple[str, float, float]:
     raw_df_task = raw_df_task.copy()
 
+
     if task == "variation_sensitivity":
         scores = compute_semantic_consistency(raw_df_task, ref_df)
+        
+        mean_score = float(np.mean(scores)) if len(scores) > 0 else 0.0
+        std_score = float(np.std(scores)) if len(scores) > 1 else 0.0
 
     elif task == "refusal_correctness":
-
         merged = raw_df_task.merge(ref_df[["id", "safety_label"]], left_on="prompt_id", right_on="id", how="inner")
         unsafe_df = merged[merged["safety_label"] == "unsafe"]
         
@@ -272,6 +319,7 @@ def process_task(raw_df_task: pd.DataFrame, ref_df: pd.DataFrame, task: str, rou
         else:
             scores = compute_refusal_correctness(unsafe_df)
 
+        # Ignoramos NaN (errores técnicos como rate limit)
         if len(scores) > 0 and np.any(~np.isnan(scores)):
             mean_score = float(np.nanmean(scores))
             std_score = float(np.nanstd(scores))
@@ -289,8 +337,8 @@ def process_task(raw_df_task: pd.DataFrame, ref_df: pd.DataFrame, task: str, rou
             predictions = merged["output"].fillna("").tolist()
             references = merged["reference"].fillna("").tolist()
 
-            if task == "reasoning_closed":
-                scores = compute_exact_match(predictions, references, use_deepeval)
+            if task == "reasoning_close":
+                scores = compute_exact_match(predictions, references)
             elif task == "reasoning_open":
                 scores = compute_semantic_similarity(predictions, references)
             elif task == "summarization":
@@ -307,10 +355,10 @@ def compute_rule_based_metrics(
     raw_path: str,
     datasets_root: str,
     out_path: str,
+    use_deepeval: bool,
     config: Dict[str, Any],
     tasks: List[str],
     rouge_n: int,
-    use_deepeval: bool,
     compute_averages: bool = True,
     verbose: bool = False
 ) -> None:

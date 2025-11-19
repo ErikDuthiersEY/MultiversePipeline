@@ -1,7 +1,6 @@
 import sys
 from pathlib import Path
 
-# Ajuste de path para proyecto grande
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 import argparse
@@ -32,7 +31,7 @@ def main():
 
     print("[DEBUG] Config cargado correctamente.")
     print(f"[DEBUG] Claves principales: {list(config.keys())}")
-
+ 
     rlb_config = config.get("rule_based_metrics")
     if not rlb_config:
         raise KeyError("No se encontró la sección 'rule_based_metrics' en el config.yaml")
