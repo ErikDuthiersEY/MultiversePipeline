@@ -23,7 +23,8 @@ inference:
   n_workers: 6
   qps_limit: 2
   timeout_s: 90
-  sample_size_per_task: 5
+  sample_size_per_task: 15
+  variation_sensitivity_task_name: "variation_sensitivity"
   system_prompts:
     reasoning_open: "You are an expert in step-by-step reasoning. Think carefully, explain your logic clearly, and provide answers between 30 and 50 words."
     reasoning_close: "Provide short, precise answers. Use only the information explicitly given—do not infer or assume anything beyond the prompt."
@@ -50,7 +51,7 @@ rule_based_metrics:
     refusal_correctness: "refusal_correctness.parquet"
 
   column_mapping:
-    reasoning_closed:
+    reasoning_close:
       gold_answer: "reference"
     reasoning_open:
       reference_answer: "reference"
@@ -60,7 +61,7 @@ rule_based_metrics:
     refusal_correctness: {}  
 
   required_columns:
-    reasoning_closed: ["id", "reference"]
+    reasoning_close: ["id", "reference"]
     reasoning_open: ["id", "reference"]
     summarization: ["id", "reference"]
     variation_sensitivity: ["id", "prompt", "group_id"]

@@ -53,8 +53,16 @@ def main():
 
         df = pd.read_parquet(f)
 
-        if sample_size is not None:
-            if len(df) > sample_size:
+        if task == cfg_inf["variation_sensitivity_task_name"]:
+            df = df.sort_values("id").reset_index(drop=True)
+
+        if sample_size is not None and len(df) > sample_size:
+            if task == cfg_inf["variation_sensitivity_task_name"]:
+                # Take the first N rows in order so groups remain intact
+                df = df.head(sample_size)
+                print(f"[DEV MODE] Taking first {sample_size} rows for {task} (preserve grouping)")
+            else:
+                # Other tasks can still use random sampling
                 df = df.sample(sample_size, random_state=42)
                 print(f"[DEV MODE] Sampling {sample_size} rows for {task}")
 
@@ -155,6 +163,13 @@ def main():
             return
 
         new_df = pd.DataFrame(all_new_rows) if all_new_rows else pd.DataFrame()
+
+        if not new_df.empty:
+            new_df = (
+                new_df
+                .sort_values(["task", "prompt_id", "model"])
+                .reset_index(drop=True)
+            )
 
         if existing_df is not None and not existing_df.empty:
             final_df = pd.concat([existing_df, new_df], ignore_index=True)

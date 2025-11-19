@@ -54,8 +54,6 @@ def main():
         out_path=str(obj_scores_path),
         config=config,
         tasks=rlb_config["tasks"],
-        rouge_n=rlb_config.get("rouge_n", 2),
-        use_deepeval=rlb_config.get("use_deepeval", True),
         compute_averages=rlb_config.get("compute_averages", True),
         verbose=rlb_config.get("verbose_mode", False)
     )

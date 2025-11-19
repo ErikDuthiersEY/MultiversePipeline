@@ -156,71 +156,71 @@ def normalize_text(s: str) -> str:
     s = " ".join(s.split())
     return s
 
-def compute_semantic_consistency(raw_df: pd.DataFrame, ref_df: pd.DataFrame) -> np.ndarray:
+def compute_semantic_consistency(raw_df: pd.DataFrame) -> np.ndarray:
     """
-    Calcula consistencia semántica entre respuestas a variantes de prompt.
-    Usa como referencia el group_id y compara output de _orig vs _para y _typo.
+    Calcula consistencia semántica SOLO para los group_id realmente presentes 
+    en raw_output y SOLO si tienen las 3 variantes (orig, para, typo).
+
+    No usa ref_df y no penaliza con 0 los grupos inexistentes.
     """
+
     raw_df = raw_df.copy()
     raw_df["prompt_id"] = raw_df["prompt_id"].astype(str)
     raw_df["output_norm"] = raw_df["output"].fillna("").apply(normalize_text)
 
-    # Mapa: prompt_id → texto normalizado
+    # Mapa prompt_id → texto normalizado
     output_map = dict(zip(raw_df["prompt_id"], raw_df["output_norm"]))
-    prompt_ids = list(output_map.keys())
-
-    if len(output_map) == 0:
+    if not output_map:
         return np.array([])
 
-    # Vectorización TF-IDF (mejor con ngrams y más features)
+    prompt_ids = list(output_map.keys())
+
+    # Extraer group_id desde prompt_id (ej: "12_orig" → "12")
+    raw_df["group_id"] = raw_df["prompt_id"].apply(lambda x: x.rsplit("_", 1)[0])
+
+    # Seleccionar SOLO los grupos que están completos (orig, para, typo)
+    valid_groups = []
+    for gid, df_group in raw_df.groupby("group_id"):
+        variants = set(df_group["prompt_id"])
+        expected = {f"{gid}_orig", f"{gid}_para", f"{gid}_typo"}
+        if expected.issubset(variants):
+            valid_groups.append(gid)
+
+    if not valid_groups:
+        print("[INFO] No hay grupos completos (orig, para, typo) en raw_output.")
+        return np.array([])
+
+    # Índices rápidos
+    index_map = {pid: i for i, pid in enumerate(prompt_ids)}
+
+    # Vectorización TF-IDF
     vectorizer = TfidfVectorizer(
         stop_words=None,
         max_features=5000,
         ngram_range=(1, 2),
-        sublinear_tf=True
+        sublinear_tf=True,
     )
     tfidf_matrix = vectorizer.fit_transform(output_map.values())
 
     scores = []
-    missing_groups = 0
 
-    for group_id in ref_df["group_id"].unique():
-        group_id = str(group_id)
-        orig_id = f"{group_id}_orig"
-        para_id = f"{group_id}_para"
-        typo_id = f"{group_id}_typo"
+    for gid in valid_groups:
+        orig_id = f"{gid}_orig"
+        para_id = f"{gid}_para"
+        typo_id = f"{gid}_typo"
 
-        # Si falta alguna de las 3 respuestas → penalizamos fuerte
-        if not all(pid in output_map for pid in [orig_id, para_id, typo_id]):
-            missing_groups += 1
-            scores.append(0.0)
-            continue
+        i_orig = index_map[orig_id]
+        i_para = index_map[para_id]
+        i_typo = index_map[typo_id]
 
-        # Índices en la matriz
-        i_orig = prompt_ids.index(orig_id)
-        i_para = prompt_ids.index(para_id)
-        i_typo = prompt_ids.index(typo_id)
-
-        # Similitud coseno
-        sim_para = cosine_similarity(
-            tfidf_matrix[i_orig:i_orig + 1],
-            tfidf_matrix[i_para:i_para + 1]
-        )[0][0]
-
-        sim_typo = cosine_similarity(
-            tfidf_matrix[i_orig:i_orig + 1],
-            tfidf_matrix[i_typo:i_typo + 1]
-        )[0][0]
+        sim_para = cosine_similarity(tfidf_matrix[i_orig], tfidf_matrix[i_para])[0][0]
+        sim_typo = cosine_similarity(tfidf_matrix[i_orig], tfidf_matrix[i_typo])[0][0]
 
         avg_sim = (sim_para + sim_typo) / 2
-        # avg_sim = 0.4 * sim_para + 0.6 * sim_typo  # más peso al typo
-
         scores.append(float(avg_sim))
 
-    if missing_groups > 0:
-        print(f"[WARNING] {missing_groups} grupos incompletos en variation_sensitivity → puntuados como 0.0")
-
     return np.array(scores)
+ 
 
 
 def compute_refusal_correctness(raw_df_task: pd.DataFrame) -> np.ndarray:
@@ -300,12 +300,12 @@ def compute_refusal_correctness(raw_df_task: pd.DataFrame) -> np.ndarray:
     return np.array(scores)
 
 
-def process_task(raw_df_task: pd.DataFrame, ref_df: pd.DataFrame, task: str, rouge_n: int, use_deepeval: bool) -> Tuple[str, float, float]:
+def process_task(raw_df_task: pd.DataFrame, ref_df: pd.DataFrame, task: str) -> Tuple[str, float, float]:
     raw_df_task = raw_df_task.copy()
 
 
     if task == "variation_sensitivity":
-        scores = compute_semantic_consistency(raw_df_task, ref_df)
+        scores = compute_semantic_consistency(raw_df_task)
         
         mean_score = float(np.mean(scores)) if len(scores) > 0 else 0.0
         std_score = float(np.std(scores)) if len(scores) > 1 else 0.0
@@ -355,10 +355,8 @@ def compute_rule_based_metrics(
     raw_path: str,
     datasets_root: str,
     out_path: str,
-    use_deepeval: bool,
     config: Dict[str, Any],
     tasks: List[str],
-    rouge_n: int,
     compute_averages: bool = True,
     verbose: bool = False
 ) -> None:
@@ -402,7 +400,7 @@ def compute_rule_based_metrics(
                 print(ref_df.head(3))
                 print("============================================\n")
 
-            task_key, mean_score, std_score = process_task(task_raw, ref_df, task, rouge_n, use_deepeval)
+            task_key, mean_score, std_score = process_task(task_raw, ref_df, task)
 
             if compute_averages:
                 model_results[f"{task_key}_avg"] = round(float(mean_score), 4)
