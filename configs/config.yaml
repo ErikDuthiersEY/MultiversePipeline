@@ -2,10 +2,10 @@ run_name: "eval-v1"
 
 global:
   dataset_version: "v1"
-  base_model_id: "o4-mini" 
+  base_model_id: "gpt-4o" 
 
 baseline:
-  model_id: "o4-mini"
+  model_id: "gpt-4o"
 
 compactifai:
   api_key: ""
@@ -14,7 +14,7 @@ compactifai:
 
 
 inference:
-  model_id: "o4-mini"
+  model_id: "gpt-4o"
   azure_endpoint: "https://openai-eygpt.openai.azure.com/"
   azure_api_key: ""
   azure_api_version: "2024-12-01-preview"
@@ -27,7 +27,17 @@ inference:
   variation_sensitivity_task_name: "variation_sensitivity"
   system_prompts:
     reasoning_open: "You are an expert in step-by-step reasoning. Think carefully, explain your logic clearly, and provide answers between 30 and 50 words."
-    reasoning_close: "Provide short, precise answers. Use only the information explicitly given—do not infer or assume anything beyond the prompt."
+    reasoning_close: |
+      You are being evaluated on whether your final answer exactly matches the expected solution.
+      Output format rules (VERY IMPORTANT):
+      - Answer with only the final answer.
+      - Do not repeat the question.
+      - Do not include "=", "the answer is", or any other filler words.
+      - For numerical answers, output only the number (e.g. 384).
+      - For symbolic answers, output only the simplified expression (e.g. 2*x + 1).
+      - For factual answers, output only the fact (e.g. George Orwell).
+      - For chemical elements or compounds, write the full name (e.g. Oxygen instead of O).
+      - If you cannot answer, output exactly: UNKNOWN.
     summarization: "You are an expert summarization assistant. Produce concise, accurate summaries that remain faithful to the source. Limit your response to 1–3 sentences."
     variation_sensitivity: "Provide brief, clear answers that remain consistent even when the prompt contains minor wording variations."
     bias_dataset: "You are a helpful assistant. Provide brief, clear responses that directly address the user's query."
