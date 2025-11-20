@@ -5,13 +5,12 @@ from typing import Dict, List, Tuple, Any
 import unicodedata
 import string
 import re
-
-from deepeval.metrics import ExactMatchMetric
-from deepeval.test_case import LLMTestCase
 from rouge_score import rouge_scorer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from decimal import Decimal, InvalidOperation
 
+DEBUG = True
 
 def load_dataset(task: str, datasets_root: str, config: Dict[str, Any]) -> pd.DataFrame:
     """Carga y estandariza el dataset de referencia usando solo el config.yaml."""
@@ -60,73 +59,167 @@ def load_dataset(task: str, datasets_root: str, config: Dict[str, Any]) -> pd.Da
     return df
 
 
-import re
-
-def compute_exact_match(predictions: List[str], references: List[str]) -> np.ndarray:
+def compute_exact_match(
+    predictions: List[str],
+    references: List[str],
+    categories: List[str],
+) -> np.ndarray:
     """
-    Exact Match REALISTA para tareas closed-ended (math, factual, yes/no, etc.)
-    - Extrae la respuesta final del modelo (boxed, último número, etc.)
-    - Compara solo la respuesta final con la referencia
-    - Usada en GSM8K, MATH, MMLU, etc.
+    Compute exact match scores with category-aware normalization.
     """
-    def extract_final_answer(text: str) -> str:
-        if not text:
-            return ""
-        
-        text = str(text)
-
-        boxed = re.search(r'\\boxed\{([^}]*)\}', text)
-        if boxed:
-            return boxed.group(1).strip()
-        
-
-        final_patterns = [
-            r'respuesta final\s*[:\-]?\s*(.+?)(?:\n|$)',
-            r'final answer\s*[:\-]?\s*(.+?)(?:\n|$)',
-            r'la respuesta es\s+(.+?)(?:\n|$)',
-            r'the answer is\s+(.+?)(?:\n|$)'
-        ]
-        for pattern in final_patterns:
-            match = re.search(pattern, text, re.IGNORECASE)
-            if match:
-                return match.group(1).strip()
-        
-
-        numbers = re.findall(r'-?\d+\.?\d*', text)
-        if numbers:
-            return numbers[-1]
-
-        lines = text.strip().split('\n')
-        for line in reversed(lines):
-            line_clean = line.lower()
-            if any(word in line_clean for word in ["respuesta", "answer", "final", "boxed"]):
-                continue
-
-            candidate = re.sub(r'[^\w\s\-]', '', line).strip()
-            if candidate and len(candidate.split()) <= 5:
-                return candidate
-        
-        return text.strip().split()[-1] if text.strip() else ""
-
-    def normalize(s: str) -> str:
-        s = str(s)
-        s = unicodedata.normalize("NFKD", s.lower())
-        s = "".join(c for c in s if not unicodedata.combining(c))
-        s = s.replace(",", ".").strip()
-        return s
+    if not (len(predictions) == len(references) == len(categories)):
+        raise ValueError("predictions, references, and categories must have the same length.")
 
     scores = []
-    for pred, ref in zip(predictions, references):
-        pred_answer = extract_final_answer(pred)
-        ref_norm = normalize(ref)
-        pred_norm = normalize(pred_answer)
 
-        if pred_norm == ref_norm or pred_norm in ref_norm or ref_norm in pred_norm:
-            scores.append(1.0)
+    for idx, (pred, ref, cat) in enumerate(zip(predictions, references, categories)):
+        if cat == "math_reasoning":
+            match = _numeric_exact_match(pred, ref)
+            norm_pred = _extract_last_number(pred)
+            norm_ref = ref
+        elif cat == "factual_close":
+            match = _text_exact_match(pred, ref)
+            norm_pred = _normalize_text(pred)
+            norm_ref = _normalize_text(ref)
         else:
-            scores.append(0.0)
+            # Fallback: treat as text
+            match = _text_exact_match(pred, ref)
+            norm_pred = _normalize_text(pred)
+            norm_ref = _normalize_text(ref)
 
-    return np.array(scores)
+        scores.append(1.0 if match else 0.0)
+
+        if DEBUG:
+            print(
+                f"[{idx}] cat={cat} | "
+                f"pred='{str(pred)[:40]}' | "
+                f"ref='{ref}' | "
+                f"norm_pred='{norm_pred}' | "
+                f"norm_ref='{norm_ref}' | "
+                f"match={1 if match else 0}"
+            )
+
+    return np.array(scores, dtype=float)
+
+def _extract_last_number(text: str):
+    """
+    Extract the final numeric value from the last non-empty line.
+    Supports:
+      - integers
+      - floats
+      - simple fractions like '1/2'
+    """
+
+    if text is None:
+        return None
+
+    cleaned = text.replace(",", "")
+
+    # Regex for a simple fraction: "a/b"
+    frac_pattern = re.compile(r"^\s*(-?\d+)\s*/\s*(-?\d+)\s*$")
+
+    for line in reversed(cleaned.splitlines()):
+        line = line.strip()
+        if not line:
+            continue
+
+        # ----- Case 1: line is exactly a fraction -----
+        m = frac_pattern.match(line)
+        if m:
+            try:
+                num = Decimal(m.group(1))
+                den = Decimal(m.group(2))
+                # Avoid division by zero
+                if den == 0:
+                    return None
+                return num / den
+            except InvalidOperation:
+                return None
+
+        # ----- Case 2: normal numeric extraction -----
+        nums = re.findall(r"-?\d+(?:\.\d+)?", line)
+        if nums:
+            try:
+                return Decimal(nums[-1])
+            except InvalidOperation:
+                return None
+
+    return None
+
+def _normalize_reference_number(ref: str):
+    """
+    Normalize a reference numeric string:
+    - supports integers, floats
+    - supports simple fractions 'a/b'
+    - returns Decimal or None if invalid
+    """
+
+    if ref is None:
+        return None
+
+    ref = ref.strip().replace(",", "")
+
+    # Fraction?
+    frac_pattern = re.compile(r"^\s*(-?\d+)\s*/\s*(-?\d+)\s*$")
+    m = frac_pattern.match(ref)
+    if m:
+        try:
+            num = Decimal(m.group(1))
+            den = Decimal(m.group(2))
+            if den == 0:
+                return None
+            return num / den
+        except InvalidOperation:
+            return None
+
+    # Otherwise: int or float
+    try:
+        return Decimal(ref)
+    except InvalidOperation:
+        return None
+
+def _numeric_exact_match(pred: str, ref: str, tol: Decimal = Decimal("0")) -> bool:
+    """
+    Compare prediction and reference as numbers.
+    """
+    pred_num = _extract_last_number(pred)
+    if pred_num is None:
+        return False
+
+    ref_num = _normalize_reference_number(ref)
+    if ref_num is None:
+        return False
+
+    return abs(pred_num - ref_num) <= tol
+
+_ARTICLES = {"a", "an", "the"}
+
+def _normalize_text(s: str) -> str:
+    """
+    SQuAD-style normalization:
+    - Lowercase
+    - Strip leading/trailing spaces
+    - Remove punctuation
+    - Remove articles
+    - Collapse multiple spaces
+    """
+    if s is None:
+        return ""
+
+    s = s.lower().strip()
+    # Remove punctuation
+    s = re.sub(r"[^\w\s]", " ", s)
+    # Collapse whitespace
+    s = re.sub(r"\s+", " ", s)
+    # Remove simple English articles
+    tokens = [t for t in s.split() if t not in _ARTICLES]
+    return " ".join(tokens)
+
+def _text_exact_match(pred: str, ref: str) -> bool:
+    """
+    Exact match over normalized text for factual_close questions.
+    """
+    return _normalize_text(pred) == _normalize_text(ref)
 
 
 def compute_semantic_similarity(predictions: List[str], references: List[str]) -> np.ndarray:
@@ -329,7 +422,12 @@ def process_task(raw_df_task: pd.DataFrame, ref_df: pd.DataFrame, task: str) -> 
 
     else:
         raw_df_task["prompt_id"] = raw_df_task["prompt_id"].astype(str)
-        merged = raw_df_task.merge(ref_df[["id", "reference"]], left_on="prompt_id", right_on="id", how="inner")
+        merged = raw_df_task.merge(
+            ref_df[["id", "reference", "category"]],
+            left_on="prompt_id",
+            right_on="id",
+            how="inner"
+        )
         
         if len(merged) == 0:
             scores = np.array([])
@@ -338,7 +436,8 @@ def process_task(raw_df_task: pd.DataFrame, ref_df: pd.DataFrame, task: str) -> 
             references = merged["reference"].fillna("").tolist()
 
             if task == "reasoning_close":
-                scores = compute_exact_match(predictions, references)
+                categories = merged["category"].fillna("").tolist()
+                scores = compute_exact_match(predictions, references, categories)
             elif task == "reasoning_open":
                 scores = compute_semantic_similarity(predictions, references)
             elif task == "summarization":
