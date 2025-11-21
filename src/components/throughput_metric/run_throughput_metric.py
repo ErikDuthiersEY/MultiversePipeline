@@ -25,9 +25,10 @@ def main():
     inf_cfg = cfg["inference"]
 
     requests_per_model = int(tp_cfg["requests_per_model"])
-    n_workers = int(tp_cfg["n_workers"])
     qps_limit = float(tp_cfg["qps_limit"])
     n_runs = int(tp_cfg["n_runs"])
+
+    worker_counts = [int(w) for w in tp_cfg["worker_counts"]]
 
     dataset_task = tp_cfg["dataset_task"]
     if dataset_task:
@@ -61,45 +62,48 @@ def main():
     throttle = QPSThrottle(qps_limit)
 
     run_rows = []
-
-    for run_id in range(1, n_runs + 1):
-
-        # Baseline model
-        run_rows.append(
-            run_throughput_for_model(
-                model_kind="baseline",
-                prompts=prompts,
-                cfg=cfg,
-                client=client,
-                throttle=throttle,
-                requests_per_model=requests_per_model,
-                n_workers=n_workers,
-                system_prompt=task_system_prompt,
-                run_id=run_id
+    for n_workers in worker_counts:
+        for run_id in range(1, n_runs + 1):
+            # Baseline model
+            run_rows.append(
+                run_throughput_for_model(
+                    model_kind="baseline",
+                    prompts=prompts,
+                    cfg=cfg,
+                    client=client,
+                    throttle=throttle,
+                    requests_per_model=requests_per_model,
+                    n_workers=n_workers,
+                    system_prompt=task_system_prompt,
+                    run_id=run_id
+                )
             )
-        )
 
-        # Compressed model
-        run_rows.append(
-            run_throughput_for_model(
-                model_kind="compressed",
-                prompts=prompts,
-                cfg=cfg,
-                client=client,
-                throttle=throttle,
-                requests_per_model=requests_per_model,
-                n_workers=n_workers,
-                system_prompt=task_system_prompt,
-                run_id=run_id
+            # Compressed model
+            run_rows.append(
+                run_throughput_for_model(
+                    model_kind="compressed",
+                    prompts=prompts,
+                    cfg=cfg,
+                    client=client,
+                    throttle=throttle,
+                    requests_per_model=requests_per_model,
+                    n_workers=n_workers,
+                    system_prompt=task_system_prompt,
+                    run_id=run_id
+                )
             )
-        )
 
     df_runs = pd.DataFrame(run_rows)
     runs_path = out_dir / "thput_runs.parquet"
     df_runs.to_parquet(runs_path, index=False)
     print(f"[THROUGHPUT] Wrote per-run throughput results to {runs_path}")
 
-    agg = df_runs.groupby("model").agg(
+    if df_runs.empty:
+        print("[THROUGHPUT] No runs recorded, nothing to aggregate.")
+        return
+
+    agg = df_runs.groupby(["model", "worker_count"]).agg(
         success_rate_mean=("success_rate", "mean"),
         success_rate_std=("success_rate", "std"),
         throughput_rps_mean=("throughput_rps", "mean"),
@@ -110,16 +114,27 @@ def main():
         latency_p95_ms_std=("latency_p95_ms", "std"),
     ).reset_index()
 
-    final_df = agg.rename(
-        columns={
-            "success_rate_mean": "thput_success_rate",
-            "throughput_rps_mean": "thput_throughput_rps",
-            "latency_avg_ms_mean": "thput_latency_avg_ms",
-            "latency_p95_ms_mean": "thput_latency_p95_ms",
-        }
-    )
+    worker_counts = sorted(agg["worker_count"].unique())
+    print(f"[THROUGHPUT] Aggregating metrics for worker_counts={worker_counts}")
 
-    out_path = out_dir / "thput_scores.parquet"
+    wide_df = None
+    for wc in worker_counts:
+        sub = agg[agg["worker_count"] == wc].copy()
+        sub = sub.drop(columns=["worker_count"])
+
+        rename_map = {
+            col: f"{col}_w{wc}" for col in sub.columns if col != "model"
+        }
+        sub = sub.rename(columns=rename_map)
+
+        if wide_df is None:
+            wide_df = sub
+        else:
+            wide_df = wide_df.merge(sub, on="model", how="outer")
+
+    final_df = wide_df
+
+    out_path = out_dir / "obj_scores.parquet"
     final_df.to_parquet(out_path, index=False)
     print(f"[OK] Wrote aggregated throughput scores to {out_path}")
     print(f"[THROUGHPUT] Aggregated rows:\n{final_df}")

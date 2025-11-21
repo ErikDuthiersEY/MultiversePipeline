@@ -256,6 +256,7 @@ def run_throughput_for_model(
     return {
         "model": report_model_name,
         "run_id": run_id,
+        "worker_count": n_workers,
         "success_rate": success_rate,
         "throughput_rps": throughput_rps,
         "latency_avg_ms": latency_avg_ms,

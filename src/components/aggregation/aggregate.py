@@ -10,7 +10,7 @@ def load_all_metric_parquets(score_dirs: list[Path]) -> list[pd.DataFrame]:
     files = []
     for d in score_dirs:
         d = Path(d)
-        files.extend(sorted(d.glob("*.parquet")))
+        files.extend(sorted(d.glob("obj_scores.parquet")))
 
     if not files:
         raise FileNotFoundError(
