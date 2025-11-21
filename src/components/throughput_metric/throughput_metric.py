@@ -1,7 +1,15 @@
-import time, json, yaml
-import threading
-from openai import AzureOpenAI
+import argparse
+import time
+import json
+import yaml
+from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+import pandas as pd
 import requests
+from openai import AzureOpenAI
+import numpy as np
+import threading
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -41,7 +49,7 @@ class QPSThrottle:
                 time.sleep(self.min_interval - delta)
             self._last = time.time()
 
-def call_model(client: AzureOpenAI, prompt: str, cfg: dict, system_prompt: str) -> dict:
+def call_baseline_model(client: AzureOpenAI, prompt: str, cfg: dict, system_prompt: str) -> dict:
     """
     Azure OpenAI Chat Completions call.
     Returns: dict(output, input_tokens, output_tokens, finish_reason, error)
@@ -102,10 +110,6 @@ def call_compactifai_model(prompt: str, cfg: dict, system_prompt: str | None = N
     url = compact_cfg["url"]
     model_id = compact_cfg["model_id"]
 
-    temperature = infer_cfg["temperature"]
-    max_tokens = infer_cfg["max_tokens"]
-    timeout = infer_cfg["timeout_s"]
-
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {api_key}",
@@ -117,8 +121,8 @@ def call_compactifai_model(prompt: str, cfg: dict, system_prompt: str | None = N
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt},
         ],
-        "temperature": temperature,
-        "max_tokens": max_tokens,
+        "temperature": infer_cfg["temperature"],
+        "max_tokens": infer_cfg["max_tokens"],
     }
 
     try:
@@ -126,7 +130,7 @@ def call_compactifai_model(prompt: str, cfg: dict, system_prompt: str | None = N
             url,
             headers=headers,
             json=data,
-            timeout=timeout,
+            timeout=infer_cfg["timeout_s"],
             verify=False
         )
         
@@ -160,3 +164,100 @@ def call_compactifai_model(prompt: str, cfg: dict, system_prompt: str | None = N
             "finish_reason": "error",
             "error": str(e),
         }
+
+
+def run_throughput_for_model(
+    model_kind: str,
+    prompts: list[str],
+    cfg: dict,
+    client: AzureOpenAI,
+    throttle: QPSThrottle,
+    requests_per_model: int,
+    n_workers: int,
+    system_prompt: str | None,
+    run_id: int,
+) -> dict:
+    """
+    Run a simple throughput test for a single model (baseline or compressed).
+
+    model_kind: "baseline" or "compressed"
+    """
+
+    if not prompts: 
+        raise ValueError("No prompts available for throughput test.")
+    
+    if model_kind == "baseline":
+        call_fn = lambda p: call_baseline_model(client, p, cfg, system_prompt)
+        report_model_name = cfg["baseline"]["model_id"]
+    else: 
+        call_fn = lambda p: call_compactifai_model(p, cfg, system_prompt)
+        report_model_name = cfg["compactifai"]["model_id"]
+
+
+    total_requests_target = int(requests_per_model)
+    latencies_ms: list[int] = []
+    success = 0 
+    failure = 0 
+
+    def worker(prompt: str) -> dict:
+        throttle.wait()
+        t0 = time.time()
+        res = call_fn(prompt)
+        dt_ms = int((time.time() - t0) * 1000)
+        return {
+            "latency_ms": dt_ms,
+            "error": res["error"],
+        }
+
+    print(f"\n[THROUGHPUT] Run {run_id} | Model={report_model_name} | "
+          f"Requests target={total_requests_target} | Workers={n_workers}")
+    
+    num_prompts = len(prompts)
+
+    t_start = time.time() 
+
+    futures = []
+    with ThreadPoolExecutor(max_workers=n_workers) as executor: 
+        for i in range(total_requests_target):
+            prompt = prompts[i % num_prompts]
+            futures.append(executor.submit(worker, prompt))
+
+        completed = 0 
+        for fut in as_completed(futures): 
+            result = fut.result() 
+            completed += 1 
+            if result["error"]:
+                failure += 1
+            else: 
+                success += 1 
+                latencies_ms.append(result["latency_ms"])
+
+            print(f"[THROUGHPUT] Run {run_id} | {report_model_name}: "
+                  f"{completed}/{total_requests_target} requests done", end="\r")
+            
+    elapsed_s = max(time.time() - t_start, 1e-6)
+    total_requests = success + failure
+    throughput_rps = total_requests / elapsed_s if total_requests > 0 else 0.0
+    success_rate = success / total_requests if total_requests > 0 else 0.0 
+
+    if latencies_ms: 
+        latency_avg_ms = float(np.mean(latencies_ms))
+        latency_p95_ms = float(np.percentile(latencies_ms, 95))
+    else: 
+        latency_avg_ms = None 
+        latency_p95_ms = None
+
+    print(f"\n[THROUGHPUT] Run {run_id} done for model={report_model_name}: "
+            f"success={success}, failure={failure}, "
+            f"throughput_rps={throughput_rps:.3f}, "
+            f"latency_avg_ms={latency_avg_ms}, latency_p95_ms={latency_p95_ms}")
+
+
+    return {
+        "model": report_model_name,
+        "run_id": run_id,
+        "success_rate": success_rate,
+        "throughput_rps": throughput_rps,
+        "latency_avg_ms": latency_avg_ms,
+        "latency_p95_ms": latency_p95_ms,
+    }

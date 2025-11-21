@@ -25,12 +25,12 @@ def get_azure_embeddings(texts: List[str], config: Dict[str, Any]) -> np.ndarray
         Array numpy con embeddings (shape: len(texts) x embedding_dim)
     """
     # Configuración de Azure desde config.yaml
-    azure_config = config.get("inference", {})
+    azure_config = config["azure"]
     
     client = AzureOpenAI(
-        api_key=azure_config.get("azure_api_key"),
-        api_version=azure_config.get("azure_api_version", "2024-12-01-preview"),
-        azure_endpoint=azure_config.get("azure_endpoint")
+        api_key=azure_config["api_key"],
+        api_version=azure_config["api_version"],
+        azure_endpoint=azure_config["endpoint"]
     )
     
     
@@ -45,7 +45,7 @@ def get_azure_embeddings(texts: List[str], config: Dict[str, Any]) -> np.ndarray
         try:
             response = client.embeddings.create(
                 input=batch,
-                model="text-embedding-ada-002"
+                model=azure_config["embeddings_id"]
             )
             batch_embeddings = [item.embedding for item in response.data]
             embeddings.extend(batch_embeddings)

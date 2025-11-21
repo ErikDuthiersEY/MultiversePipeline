@@ -21,11 +21,12 @@ def load_cfg(path: str) -> dict:
 
 def make_client(cfg: dict) -> AzureChatOpenAI:
     llm_cfg = cfg["llm_evaluated_metrics"]
+    azure_cfg = cfg["azure"]
     client = AzureChatOpenAI(
-        api_key=llm_cfg["azure_api_key"],  # ← tal cual lo tenías
+        api_key=azure_cfg["api_key"],  # ← tal cual lo tenías
         azure_deployment=llm_cfg["judge_model_id"],
-        api_version=llm_cfg["azure_api_version"],
-        azure_endpoint=llm_cfg["azure_endpoint"],
+        api_version=azure_cfg["api_version"],
+        azure_endpoint=azure_cfg["endpoint"],
         timeout=llm_cfg["timeout_s"],
     )
     return client
