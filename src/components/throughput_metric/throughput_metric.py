@@ -97,7 +97,7 @@ def call_baseline_model(client: AzureOpenAI, prompt: str, cfg: dict, system_prom
             "error": str(e)
         }
     
-def call_compactifai_model(prompt: str, cfg: dict, system_prompt: str | None = None) -> dict:
+def call_compactifai_model(prompt: str, cfg: dict, model_id: str, system_prompt: str | None = None) -> dict:
     """
     Compressed model call via CompactifAI HTTP API.
     Returns: dict(model, output, input_tokens, output_tokens, finish_reason, error)
@@ -108,7 +108,6 @@ def call_compactifai_model(prompt: str, cfg: dict, system_prompt: str | None = N
 
     api_key = compact_cfg["api_key"]
     url = compact_cfg["url"]
-    model_id = compact_cfg["model_id"]
 
     headers = {
         "Content-Type": "application/json",
@@ -187,11 +186,13 @@ def run_throughput_for_model(
         raise ValueError("No prompts available for throughput test.")
     
     if model_kind == "baseline":
-        call_fn = lambda p: call_baseline_model(client, p, cfg, system_prompt)
-        report_model_name = cfg["baseline"]["model_id"]
+        baseline_model_id = cfg["baseline"]["model_id"]
+        call_fn = lambda p: call_compactifai_model(p, cfg, baseline_model_id, system_prompt)
+        report_model_name = baseline_model_id
     else: 
-        call_fn = lambda p: call_compactifai_model(p, cfg, system_prompt)
-        report_model_name = cfg["compactifai"]["model_id"]
+        compressed_model_id =  cfg["compactifai"]["model_id"]
+        call_fn = lambda p: call_compactifai_model(p, cfg, compressed_model_id, system_prompt)
+        report_model_name = compressed_model_id
 
 
     total_requests_target = int(requests_per_model)

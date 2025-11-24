@@ -98,11 +98,13 @@ def main():
             Returns a list of two row dicts.
             """
             rows = []
+            baseline_model_id = cfg["baseline"]["model_id"]
+            compressed_model_id = cfg["compactifai"]["model_id"]
 
             # Baseline model (Azure)
             throttle.wait()
             t0 = time.time()
-            res_base = call_model(client, prompt, cfg, task_system_prompt)
+            res_base = call_compactifai_model(prompt, cfg, baseline_model_id, task_system_prompt)
             latency_base_ms = int((time.time() - t0) * 1000)
 
             rows.append(
@@ -123,7 +125,7 @@ def main():
             # Compressed model (CompactifAI)
             throttle.wait()
             t1 = time.time()
-            res_comp = call_compactifai_model(prompt, cfg, task_system_prompt)
+            res_comp = call_compactifai_model(prompt, cfg, compressed_model_id, task_system_prompt)
             latency_comp_ms = int((time.time() - t1) * 1000)
 
             rows.append(

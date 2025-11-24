@@ -7,7 +7,7 @@ azure:
   embeddings_id: "text-embedding-ada-002"
 
 baseline:
-  model_id: "gpt-4o"
+  model_id: "llama-3-1-8b"
 
 compactifai:
   api_key: ""
@@ -15,12 +15,12 @@ compactifai:
   model_id: "cai-llama-3-1-8b-slim"
 
 inference:
-  temperature: 0.0
+  temperature: 0.7
   max_tokens: 2000
   n_workers: 6
   qps_limit: 2
   timeout_s: 90
-  sample_size_per_task: 6
+  sample_size_per_task: 
   variation_sensitivity_task_name: "variation_sensitivity"
   system_prompts:
     reasoning_open: "You are an expert in step-by-step reasoning. Think carefully, explain your logic clearly, and provide answers between 30 and 50 words."
@@ -80,7 +80,8 @@ llm_evaluated_metrics:
   bias_task_name: "bias_dataset"            
   hallucination_task_name: "hallucination"           
   judge_model_id: "gpt-4o"
-  timeout_s: 90  
+  timeout_s: 90
+  temperature: 0.0  
   n_workers: 1 
 
 throughput:

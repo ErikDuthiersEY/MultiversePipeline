@@ -89,7 +89,7 @@ def call_model(client: AzureOpenAI, prompt: str, cfg: dict, system_prompt: str) 
             "error": str(e)
         }
     
-def call_compactifai_model(prompt: str, cfg: dict, system_prompt: str | None = None) -> dict:
+def call_compactifai_model(prompt: str, cfg: dict, model_id: str, system_prompt: str | None = None) -> dict:
     """
     Compressed model call via CompactifAI HTTP API.
     Returns: dict(model, output, input_tokens, output_tokens, finish_reason, error)
@@ -100,7 +100,6 @@ def call_compactifai_model(prompt: str, cfg: dict, system_prompt: str | None = N
 
     api_key = compact_cfg["api_key"]
     url = compact_cfg["url"]
-    model_id = compact_cfg["model_id"]
 
     temperature = infer_cfg["temperature"]
     max_tokens = infer_cfg["max_tokens"]

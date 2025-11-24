@@ -56,7 +56,7 @@ def build_eval_pipeline(env: Environment, datasets_path: str, config_path: str, 
     )
 
     thput_metrics = command(
-        code=str(Path(__file__).parents[1] / "components/throughput"), 
+        code=str(Path(__file__).parents[1] / "components/throughput_metric"), 
         environment=env,
         command=(
             "python run_throughput_metric.py "

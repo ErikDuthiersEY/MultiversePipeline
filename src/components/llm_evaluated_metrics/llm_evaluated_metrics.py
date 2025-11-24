@@ -28,6 +28,7 @@ def make_client(cfg: dict) -> AzureChatOpenAI:
         api_version=azure_cfg["api_version"],
         azure_endpoint=azure_cfg["endpoint"],
         timeout=llm_cfg["timeout_s"],
+        temperature=llm_cfg["temperature"]
     )
     return client
 
